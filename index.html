@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Extreme Glitchy Text Generator</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Arial', sans-serif;
+            padding-top: 50px;
+        }
+        .container {
+            max-width: 900px;
+        }
+        .card {
+            border-radius: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        .card-body {
+            text-align: center;
+        }
+.output-text {
+    background-color: #f4f4f4;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 16px;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    color: #333;
+    line-height: 1.5;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    max-width: 100%;
+    word-wrap: break-word;
+}
+
+
+        .slider-container {
+            margin-top: 20px;
+        }
+        .slider-container input[type="range"] {
+            width: 100%;
+        }
+        .btn-reset {
+            margin-top: 20px;
+            width: 100%;
+            padding: 12px;
+            font-size: 18px;
+            border-radius: 10px;
+            background-color: #f44336;
+            color: white;
+            border: none;
+        }
+        .btn-reset:hover {
+            background-color: #e53935;
+        }
+        .emoji-input {
+            width: 100%;
+            padding: 12px;
+            margin-top: 15px;
+            font-size: 18px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+        }
+        .emoji-input:focus {
+            outline: none;
+            border-color: #007bff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h2>Extreme Glitchy Text Generator</h2>
+            </div>
+            <div class="card-body">
+                <label for="text-input" class="form-label">Enter your text (no limit):</label>
+                <input type="text" id="text-input" class="emoji-input" placeholder="Type here...">
+
+                <div class="slider-container">
+                    <label for="curse-slider" class="form-label">Curse Level:</label>
+                    <input type="range" id="curse-slider" class="form-range" min="0" max="3000" value="0">
+                </div>
+
+                <button class="btn-reset" id="reset-btn">Reset</button>
+
+                <div class="output-text" id="output-text"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+
+    <script>
+        // Mảng ký tự diacritics (Unicode)
+        const curseDiacritics = [
+            '\u0300', '\u0301', '\u0302', '\u0303', '\u0304', '\u0305', '\u0306', '\u0307', '\u0308', '\u0309', '\u030A',
+            '\u0316', '\u0317', '\u0318', '\u0319', '\u031A', '\u033D', '\u033E', '\u033F', '\u0340', '\u0341', '\u0342',
+            '\u0343', '\u0344', '\u0345', '\u0346', '\u0347', '\u0348', '\u0349', '\u034A', '\u034B', '\u034C', '\u034D',
+            '\u034E', '\u034F', '\u0350', '\u0351', '\u0352', '\u0353', '\u0354', '\u0355', '\u0356', '\u0357', '\u0358'
+        ];
+
+        // Hàm tạo text glitchy với curse level
+        function applyGlitchyText() {
+            const textInput = document.getElementById('text-input').value;
+            const curseLevel = document.getElementById('curse-slider').value;
+            let glitchedText = '';
+            const length = textInput.length;
+
+            // Lặp qua từng ký tự trong văn bản
+            for (let i = 0; i < length; i++) {
+                glitchedText += textInput[i];
+
+                // Số lượng diacritics phụ thuộc vào curse level
+                let diacriticCount = curseLevel / 10;
+
+                // Đảm bảo phần giữa cũng có glitchy effect, không thiếu diacritics
+                if (curseLevel > 1000 && (i < length / 3 || i > 2 * length / 3)) {
+                    diacriticCount = curseLevel / 5; // Phần đầu và cuối sẽ có nhiều diacritics hơn
+                }
+
+                // Thêm diacritics vào mỗi ký tự
+                for (let j = 0; j < diacriticCount; j++) {
+                    glitchedText += curseDiacritics[Math.floor(Math.random() * curseDiacritics.length)];
+                }
+            }
+
+            // Cập nhật văn bản đã bị glitchy vào phần tử output-text
+            document.getElementById('output-text').textContent = glitchedText;
+        }
+
+        // Gọi hàm mỗi khi có sự thay đổi
+        document.getElementById('text-input').addEventListener('input', applyGlitchyText);
+        document.getElementById('curse-slider').addEventListener('input', applyGlitchyText);
+
+        // Reset input và curse slider
+        document.getElementById('reset-btn').addEventListener('click', () => {
+            document.getElementById('text-input').value = '';
+            document.getElementById('curse-slider').value = 0;
+            applyGlitchyText();
+        });
+
+        // Thực hiện khi tải trang
+        window.onload = applyGlitchyText;
+    </script>
+</body>
+</html>
